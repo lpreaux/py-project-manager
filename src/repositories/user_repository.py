@@ -1,27 +1,32 @@
 from sqlmodel import Session, select
 
-from ..models import User
+from src.models import User
 
 
 class UserRepository:
-    def __init__(self):
-        pass
-
-    def add_user(self, db: Session, user: User):
+    
+    def create_user(self, db: Session, user: User) -> User:
         db.add(user)
         db.commit()
+        db.refresh(user)
+        return user
 
-    def get_all_users(self, db: Session):
+    def get_all_users(self, db: Session) -> list[User]:
         return db.exec(select(User)).all()
 
-    def get_user(self, db: Session, user_id: int):
+    def get_user_by_id(self, db: Session, user_id: int) -> User | None:
         return db.get(User, user_id)
 
-    def update_user(self, db: Session, user: User):
+    def update_user(self, db: Session, user: User) -> User:
         db.add(user)
         db.commit()
+        db.refresh(user)
+        return user
 
-    def delete_user(self, db: Session, user_id: int):
+    def delete_user(self, db: Session, user_id: int) -> bool:
         user = db.get(User, user_id)
-        db.delete(user)
-        db.commit()
+        if user:
+            db.delete(user)
+            db.commit()
+            return True
+        return False

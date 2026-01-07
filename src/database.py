@@ -2,7 +2,7 @@ import os
 import time
 
 from sqlalchemy.exc import OperationalError
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel, create_engine, Session
 
 
 # Récupérer les variables d'environnement pour la base de données
@@ -35,3 +35,8 @@ else:
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
+
+def get_session():
+    """Dependency function that provides a database session per request"""
+    with Session(engine) as session:
+        yield session

@@ -1,5 +1,4 @@
-from typing import Annotated, Optional
-
+from typing import Optional
 from sqlmodel import SQLModel, Field
 
 

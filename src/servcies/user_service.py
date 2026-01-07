@@ -1,12 +1,31 @@
 from sqlmodel import Session
 
-from src.repositories.user_repository import UserRepository
+from src.repositories import UserRepository
+from src.models import User
 
 
 class UserService:
     def __init__(self):
         self.repository = UserRepository()
 
-
     def get_all_users(self, db: Session):
         return self.repository.get_all_users(db)
+    
+    def get_user_by_id(self, user_id: int, db: Session):
+        return self.repository.get_user_by_id(db, user_id)
+    
+    def create_user(self, user_data: dict, db: Session):
+        user = User(**user_data)
+        return self.repository.create_user(db, user)
+    
+    def update_user(self, user_id: int, user_data: dict, db: Session):
+        user = self.repository.get_user_by_id(db, user_id)
+        if user:
+            for key, value in user_data.items():
+                if hasattr(user, key):
+                    setattr(user, key, value)
+            return self.repository.update_user(db, user)
+        return None
+    
+    def delete_user(self, user_id: int, db: Session):
+        return self.repository.delete_user(db, user_id)
