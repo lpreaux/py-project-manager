@@ -3,8 +3,8 @@ from sqlmodel import SQLModel, Field
 from pydantic import EmailStr, field_validator
 
 class UserBase(SQLModel):
-    username: str = Field(min_length=3, max_length=50)
-    email: EmailStr
+    username: str = Field(min_length=3, max_length=50, unique=True)
+    email: EmailStr = Field(unique=True)
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
