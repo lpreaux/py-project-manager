@@ -3,7 +3,7 @@ load_dotenv()
 
 from fastapi import FastAPI
 
-from .database import create_db_and_tables
+from src.config import create_db_and_tables
 from .routers import router
 
 
